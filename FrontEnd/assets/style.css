@@ -101,6 +101,9 @@ li:hover {
 #introduction {
 	display: flex;
 	align-items: center;
+	margin-top: 100px;
+	margin-bottom: 100px;
+
 }
 #introduction figure {
 	flex: 1
@@ -123,7 +126,6 @@ li:hover {
 }
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
 }
 .gallery {
 	width: 100%;
@@ -184,5 +186,31 @@ footer nav ul {
 	display: flex;
 	justify-content: flex-end;
 	margin: 2em
+}
+
+.boutons {
+	display: flex;
+	justify-content:center;
+}
+
+button { 
+	align-content: center;
+	height: 40px;
+    font-size: 18px;
+	font-family: 'Syne';
+	font-weight: 600;
+	color: #1D6154;
+	background-color: #ffffff;
+	text-align: center;
+	border: 1px solid #1D6154;
+	border-radius: 60px ;
+	min-width: 100px;
+	margin: 70px 5px;
+	padding: 0px 20px;
+}
+
+.selected {
+	background-color: #1D6154; 
+	color: white;
 }
 

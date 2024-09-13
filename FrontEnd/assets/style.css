@@ -28,8 +28,13 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
+html {
+	background-color: #fffef7;
+}
 body {
 	line-height: 1;
+	background-color: #fffef7;
 }
 ol, ul {
 	list-style: none;
@@ -185,7 +190,8 @@ input[type="submit"]{
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
-	margin: 2em
+	padding: 2em;
+	background-color: white;
 }
 
 .boutons {
@@ -200,7 +206,7 @@ button {
 	font-family: 'Syne';
 	font-weight: 600;
 	color: #1D6154;
-	background-color: #ffffff;
+	background-color: #fffef7;
 	text-align: center;
 	border: 1px solid #1D6154;
 	border-radius: 60px ;
@@ -213,4 +219,3 @@ button {
 	background-color: #1D6154; 
 	color: white;
 }
-

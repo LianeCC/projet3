@@ -1,3 +1,9 @@
+import { afficherBoutonConnexion } from "./connexion.js";
+
+window.onload = () => {
+    afficherBoutonConnexion();
+};
+
 // Récupération des projets réalisés depuis l'API
 const reponseProjets = await fetch('http://localhost:5678/api/works');
 const projets = await reponseProjets.json();
@@ -45,6 +51,7 @@ function genererBouton(categories) {
     // Création du bouton "Tous"
     const boutonTous = document.createElement("button");
     boutonTous.innerHTML = "Tous";
+    boutonTous.classList.add("selected");
     emplacementBoutons.appendChild(boutonTous);
 
     // Ajout d'un EventListener pour afficher tous les projets

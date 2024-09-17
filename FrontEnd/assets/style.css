@@ -53,11 +53,20 @@ table {
 }
 /** end reset css**/
 body {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	min-height: 100vh;
 	max-width: 1140px;
 	margin:auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
+
+.content {
+	flex:1;
+}
+
 header {
 	display: flex;
 	justify-content: space-between;
@@ -93,16 +102,28 @@ nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
-
 }
+
 nav li {
-	padding: 0 10px;
+	padding: 0 20px;
 	font-size: 1.2em;
+	text-decoration: none;
+	color: #000000;
 }
 
-li:hover {
+nav li a {
+	text-decoration: none;
+	color: #000000;
+}
+
+nav li a:hover {
 	color: #B1663C;
 }
+
+nav li:hover {
+	color: #B1663C;
+}
+
 #introduction {
 	display: flex;
 	align-items: center;
@@ -144,6 +165,7 @@ li:hover {
 	width: 100%;
 
 }
+
 #contact {
 	width: 50%;
 margin: auto;
@@ -185,6 +207,57 @@ input[type="submit"]{
 	width: 180px;
 	text-align: center;
 	border-radius: 60px ;
+}
+
+#formulaire-login {
+	width: 50%;
+	margin: auto;
+}
+#formulaire-login > * {
+	text-align: center;
+
+}
+#formulaire-login h2{
+	margin-bottom: 20px;
+}
+#formulaire-login form {
+	text-align: left;
+	margin-top:30px;
+	display: flex;
+	flex-direction: column;
+}
+
+#formulaire-login input {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+#formulaire-login label {
+	margin: 2em 0 1em 0;
+}
+
+input[type="submit"]{
+	font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	background-color: #1D6154;
+	margin : 2em auto ;
+	width: 180px;
+	text-align: center;
+	border-radius: 60px ;
+}
+
+.forgot-password a {
+	color: black;
+}
+
+#message-erreur {
+	display: none;
+	font-weight: 700;
+	color: #B1663C;
+	text-align: center;
+	padding-top: 20px;
 }
 
 footer nav ul {

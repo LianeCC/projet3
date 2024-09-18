@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 	<meta charset="UTF-8">
 	<title>Sophie Bluel - Architecte d'intérieur</title>
@@ -10,22 +11,33 @@
 	<link rel="shortcut icon" href="#">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 	<script type="module" src="projets.js"></script>
 </head>
+
 <body>
+
+	<div class="bannerEditionMode">
+		<i class="fa-regular fa-pen-to-square"></i>
+		<p>Mode édition</p>	
+	</div>
+	
 	<div class="content">
+
 		<header>
 			<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 			<nav>
 				<ul>
 					<li><a href="./index.html">projets</a></li>
-					<li>contact</li>
+					<li><a href="#">contact</a></li>
 					<li><a href="login.html" id="login-logout">login</a></li>
-					<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+					<li><a href="#"><img src="./assets/icons/instagram.png" alt="Instagram"></a></li>
 				</ul>
 			</nav>
 		</header>
+		
 		<main>
+			
 			<section id="introduction">
 				<figure>
 					<img src="./assets/images/sophie-bluel.png" alt="">
@@ -37,14 +49,32 @@
 					<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
 				</article>
 			</section>
+			
 			<section id="portfolio">
-				<h2>Mes Projets</h2>
+					<h2>Mes Projets</h2>
+					<div class="bannerModifier">
+						<i class="fa-regular fa-pen-to-square"></i>
+
+						<a href="#modale" class="boutonModifier">modifier</a>	
+						<aside id="modale" class="modale" aria-hidden="true" role="dialog" aria-labelledby="titlemodal" style="display:none">
+							<div class="modale-wrapper modal-stop">
+								<button class="fermerModale">fermer la boite modale</button> 
+								<h2 id="titlemodal"> Galerie photo </h2>
+								<div class="projets-disponibles">
+								</div>
+								<button class="ajout-projet">Ajouter une photo</button>
+							</div>
+						</aside>
+					
+					</div>
 				<div class="boutons">
 				</div>
 				<div class="gallery">
 				</div>
-
 			</section>
+
+			
+			
 			<section id="contact">
 				<h2>Contact</h2>
 				<p>Vous avez un projet ? Discutons-en !</p>
@@ -58,8 +88,13 @@
 					<input type="submit" value="Envoyer">
 				</form>
 			</section>
+		
 		</main>
+
 	</div>
+
+	
+	
 	<footer>
 		<nav>
 			<ul>
@@ -67,5 +102,7 @@
 			</ul>
 		</nav>
 	</footer>
+
 </body>
+
 </html>

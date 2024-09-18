@@ -35,7 +35,15 @@ html {
 body {
 	line-height: 1;
 	background-color: #fffef7;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	min-height: 100vh;
+	font-family: 'Work Sans' ;
+	font-size: 14px;
+
 }
+
 ol, ul {
 	list-style: none;
 }
@@ -52,28 +60,35 @@ table {
 	border-spacing: 0;
 }
 /** end reset css**/
-body {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	min-height: 100vh;
-	max-width: 1140px;
-	margin:auto;
-	font-family: 'Work Sans' ;
-	font-size: 14px;
+
+
+.bannerEditionMode {
+	display: none;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	background-color: #000000;
+	height: 59px;
+	color: #fffef7;
+}
+
+.bannerEditionMode p {
+	padding-left: 10px;
 }
 
 .content {
-	flex:1;
+	width: 1140px;
+	flex: 1;
+	margin: auto;	
 }
 
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
+	margin: 50px 0px;
 }
 section {
-	margin: 50px 0
+	margin: 50px 0px;
 }
 
 h1{
@@ -120,8 +135,8 @@ nav li a:hover {
 	color: #B1663C;
 }
 
-nav li:hover {
-	color: #B1663C;
+nav img {
+	max-width: 20px;
 }
 
 #introduction {
@@ -153,6 +168,47 @@ nav li:hover {
 #portfolio h2 {
 	text-align: center;
 }
+
+.bannerModifier {
+	display: none;
+	position: relative;
+	top : -20px;
+	left: 700px;
+}
+
+.bannerModifier a {
+	padding-left: 10px;
+	text-decoration: none;
+}
+
+.bannerModifier:hover {
+	color: #B1663C;
+}
+
+.bannerModifier a:hover {
+	color: #B1663C;
+}
+
+
+.modale {
+	position : fixed;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	top: 0;
+	left: 0; 
+	width: 100%;
+	height: 100%;
+	background:rgba(0, 0, 0, 0.3)
+}
+
+.modale-wrapper {
+	width: 600px;
+	padding: 20px;
+	background-color: #ffffff;
+}
+
+
 .gallery {
 	width: 100%;
 	display: grid;
@@ -163,12 +219,11 @@ nav li:hover {
 
 .gallery img {
 	width: 100%;
-
 }
 
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
 #contact > * {
 	text-align: center;
@@ -270,10 +325,13 @@ footer nav ul {
 .boutons {
 	display: flex;
 	justify-content:center;
+	align-items: center;
+	min-height: 150px;
 }
 
 button { 
-	align-content: center;
+	display: flex;
+	align-items: center;
 	height: 40px;
     font-size: 18px;
 	font-family: 'Syne';
@@ -284,7 +342,7 @@ button {
 	border: 1px solid #1D6154;
 	border-radius: 60px ;
 	min-width: 100px;
-	margin: 70px 5px;
+	margin: 0px 5px;
 	padding: 0px 20px;
 }
 

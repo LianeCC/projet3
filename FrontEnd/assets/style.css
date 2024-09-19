@@ -177,18 +177,17 @@ nav img {
 }
 
 .bannerModifier a {
-	padding-left: 10px;
 	text-decoration: none;
+	color: #000000;
 }
 
-.bannerModifier:hover {
-	color: #B1663C;
+.bannerModifier i {
+	padding-right: 10px;
 }
 
 .bannerModifier a:hover {
 	color: #B1663C;
 }
-
 
 .modale {
 	position : fixed;
@@ -204,13 +203,66 @@ nav img {
 
 .modale-wrapper {
 	width: 600px;
+	max-height: 800px;
+	overflow: auto;
 	padding: 20px;
 	background-color: #ffffff;
 }
 
-.projets-disponibles img {
-	width: 15%;
+
+/*********************/
+
+.projets-disponibles {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
 }
+
+.image-container img {
+	width: 100%;
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+    margin: 10px; /* Pour espacer les images si nécessaire */
+}
+
+.trash-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    background-color: black;
+    padding: 5px;
+    border-radius: 50%;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+.projet-container {
+	position: relative;
+	display: flex;
+	flex-direction: ;
+}
+
+.projet-container img {
+    width: 15%;
+    height: auto;
+}
+
+.projet-container i {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    background-color: black;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/****************/
 
 
 .gallery {

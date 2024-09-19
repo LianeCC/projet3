@@ -159,11 +159,17 @@ const stopPropagation = function (event) {
 // ajout des projets dans la modale 
 function genererProjetModale(projets) {
     const sectionProjetModale = document.querySelector(".projets-disponibles");
-    for (let i = 0; i <projets.length; i++) {
+    for (let i = 0; i < projets.length; i++) {
         const projetModale = projets[i];
+        const projetContainer = document.createElement("div");
+        projetContainer.classList.add("projet-container");
         const imageProjetModale = document.createElement("img");
         imageProjetModale.src = projetModale.imageUrl;
-        sectionProjetModale.appendChild(imageProjetModale);
+        const iconTrash = document.createElement("i");
+        iconTrash.classList.add("fa-solid", "fa-trash-can");
+        projetContainer.appendChild(imageProjetModale);
+        projetContainer.appendChild(iconTrash);
+        sectionProjetModale.appendChild(projetContainer);
     }
 }
 genererProjetModale(projets);
@@ -201,12 +207,6 @@ backToProjectList.addEventListener("click", backToModal1);
 
 
 
-// retour à modale1 au clic sur flèche retour 
 
-// retourvue1 est en display none 
-//si on clique sur ajouter photo, on bascule sur vuemodale2 (display: null)
-// et on met vuemodale1 en display none 
-// si on clique sur la fleche retour vue 1, on rebascule sur vuemodale1 display null et vuemodale2 display none 
-//  
 
 

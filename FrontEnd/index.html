@@ -53,9 +53,7 @@
 			<section id="portfolio">
 					<h2>Mes Projets</h2>
 					<div class="bannerModifier">
-						<i class="fa-regular fa-pen-to-square"></i>
-
-						<a href="#modale" class="boutonModifier">modifier</a>	
+						<a href="#modale" class="boutonModifier"><i class="fa-regular fa-pen-to-square"></i>modifier</a>	
 						<aside id="modale" class="modale" aria-hidden="true" role="dialog" aria-labelledby="titlemodal" style="display:none">
 							<div class="modale-wrapper modal-stop">
 								<div class="icones-modale">
@@ -69,7 +67,14 @@
 								</div>
 								<div class="vuemodale2" style="display:none">
 									<h2 id="titlemodal"> Ajout photo </h2>
-									<div></div>
+									<form id="form-add-photo">
+										<label for="image">Choisir une image: </label>
+										<input type="file" id="image" name="image" accept="image/*" required>
+										<label for="title">Titre :</label>
+										<input type="text" id="title" name="title" placeholder="Titre du projet" required>
+										<label for="category">Categorie :</label>
+										<select id="category" name="category" required></select> 
+									</form>
 									<button class="valider-projet">Valider</button>
 								</div>
 							</div>

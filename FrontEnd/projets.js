@@ -122,7 +122,7 @@ function genererBouton(categories) {
 genererBouton(categories);
 
 
-// GESTION MODALE POUR AJOUT/SUPPRESSION PROJETS
+// ***** GESTION MODALE POUR AJOUT/SUPPRESSION PROJETS
 let modale = null; 
 
 // ouverture de la modale
@@ -142,6 +142,7 @@ const openModal = function (event) {
 const closeModal = function (event) {
     if (modale === null) return;
     event.preventDefault()
+    backToModal1(); // retour à la vue initiale si on est sur la vue 2
     modale.style.display="none";
     modale.setAttribute("aria-hidden", "true");
     modale.removeAttribute("aria-modal");
@@ -158,7 +159,6 @@ const stopPropagation = function (event) {
 // ajout des projets dans la modale 
 function genererProjetModale(projets) {
     const sectionProjetModale = document.querySelector(".projets-disponibles");
-    
     for (let i = 0; i <projets.length; i++) {
         const projetModale = projets[i];
         const imageProjetModale = document.createElement("img");
@@ -173,9 +173,40 @@ document.querySelectorAll(".boutonModifier").forEach(a => {
     a.addEventListener("click", openModal);
 })
 
-// changement de vue modale selon bouton
-// de basse, retourvue1 est en display none 
+// ouverture de la seconde vue     
+function openModal2 () {
+    const viewModale1 = document.querySelector(".vuemodale1")
+    viewModale1.style.display = "none";
+    const viewModale2 = document.querySelector(".vuemodale2");
+    viewModale2.style.display = null;
+    const backArrow = document.querySelector(".retourvue1");
+    backArrow.style.display = null; 
+    
+};
+const addProject = document.querySelector(".ajout-projet");
+addProject.addEventListener("click", openModal2);
+
+// retour à la première vue 
+function backToModal1 () {
+    const viewModale1 = document.querySelector(".vuemodale1")
+    viewModale1.style.display = null;
+    const viewModale2 = document.querySelector(".vuemodale2");
+    viewModale2.style.display = "none";
+    const backArrow = document.querySelector(".retourvue1");
+    backArrow.style.display = "none"; 
+}
+const backToProjectList = document.querySelector(".retourvue1");
+backToProjectList.addEventListener("click", backToModal1);
+
+
+
+
+// retour à modale1 au clic sur flèche retour 
+
+// retourvue1 est en display none 
 //si on clique sur ajouter photo, on bascule sur vuemodale2 (display: null)
 // et on met vuemodale1 en display none 
 // si on clique sur la fleche retour vue 1, on rebascule sur vuemodale1 display null et vuemodale2 display none 
 //  
+
+

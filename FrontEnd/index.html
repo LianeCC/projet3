@@ -52,21 +52,29 @@
 			
 			<section id="portfolio">
 					<h2>Mes Projets</h2>
+					
 					<div class="bannerModifier">
 						<a href="#modale" class="boutonModifier"><i class="fa-regular fa-pen-to-square"></i>modifier</a>	
 						<aside id="modale" class="modale" aria-hidden="true" role="dialog" aria-labelledby="titlemodal" style="display:none">
 							<div class="modale-wrapper modal-stop">
-								<div class="icones-modale">
-									<button class="retourvue1" style="display:none">Retour</button>
-									<button class="fermerModale">fermer la boite modale</button> 
-								</div>
+								
 								<div class="vuemodale1">
-									<h2 id="titlemodal"> Galerie photo </h2>
+									<div class="icones-modale">
+										<button class="fermerModale"><i class="fa-solid fa-xmark"></i></button>
+									</div>
+									<h3 id="titlemodal"> Galerie photo</h3>
 									<div class="projets-disponibles"></div>
-									<button class="ajout-projet">Ajouter une photo</button>
+									<div class="div-ajout-projet">
+										<button class="ajout-projet">Ajouter une photo</button>
+									</div>
 								</div>
+								
 								<div class="vuemodale2" style="display:none">
-									<h2 id="titlemodal"> Ajout photo </h2>
+									<div class="icones-modale">
+										<button class="retourvue1" style="display:none"><i class="fa-solid fa-arrow-left"></i></button>
+										<button class="fermerModale"><i class="fa-solid fa-xmark"></i></button>
+									</div>
+									<h3 id="titlemodal"> Ajout photo </h3>
 									<form id="form-add-photo">
 										<label for="image">Choisir une image: </label>
 										<input type="file" id="image" name="image" accept="image/*" required>
@@ -77,14 +85,17 @@
 									</form>
 									<button class="valider-projet">Valider</button>
 								</div>
+
 							</div>
 						</aside>
 					
 					</div>
 				<div class="boutons">
 				</div>
+
 				<div class="gallery">
 				</div>
+
 			</section>
 
 			

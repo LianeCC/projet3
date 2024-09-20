@@ -41,7 +41,6 @@ body {
 	min-height: 100vh;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
-
 }
 
 ol, ul {
@@ -59,6 +58,11 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+button {
+	all: unset;
+}
+
 /** end reset css**/
 
 
@@ -91,7 +95,7 @@ section {
 	margin: 50px 0px;
 }
 
-h1{
+h1 {
 	display: flex;
 	flex-direction: column;
 	font-family: 'Syne';
@@ -107,11 +111,16 @@ h1 > span {
 ;
 }
 
-h2{
+h2 {
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
 	color: #1D6154
+}
+
+h3 {
+	font-size: 30px;
+
 }
 nav ul {
 	display: flex;
@@ -181,13 +190,15 @@ nav img {
 	color: #000000;
 }
 
-.bannerModifier i {
+.boutonModifier i {
 	padding-right: 10px;
 }
 
 .bannerModifier a:hover {
 	color: #B1663C;
 }
+
+/******** modale **********/ 
 
 .modale {
 	position : fixed;
@@ -202,64 +213,86 @@ nav img {
 }
 
 .modale-wrapper {
-	width: 600px;
-	max-height: 800px;
-	overflow: auto;
+	width: 630px;
+	min-height: 688px;
 	padding: 20px;
 	background-color: #ffffff;
+	border-radius: 10px;
+}
+
+.modale-wrapper h3 {
+	text-align: center;
+	padding-bottom: 50px;
+}
+.icones-modale {
+	display: flex;
+	align-items: center;
+}
+
+.vuemodale1 .icones-modale {
+	justify-content: flex-end;
+	border: none;
+}
+
+.vuemodale2 .icones-modale {
+	justify-content: space-between;
+}
+
+.icones-modale button {
+	font-size: 1.5em;
+	margin: 10px;
 }
 
 
-/*********************/
+/********* vue modale 1 **********/
 
 .projets-disponibles {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-}
-
-.image-container img {
-	width: 100%;
-}
-
-.image-container {
-    position: relative;
-    display: inline-block;
-    margin: 10px; /* Pour espacer les images si nécessaire */
-}
-
-.trash-icon {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    color: white;
-    background-color: black;
-    padding: 5px;
-    border-radius: 50%;
-    font-size: 1.2em;
-    cursor: pointer;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);	
+	gap: 5px;
+	margin: 0 90px;
+	padding-bottom: 50px;
+	border-bottom: 1px solid #c9c9c9;
 }
 
 .projet-container {
-	position: relative;
 	display: flex;
-	flex-direction: ;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .projet-container img {
-    width: 15%;
-    height: auto;
+    width: 100%;
 }
 
 .projet-container i {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    position: relative;
+	font-size: 10px;
+	width: 8px;
+	bottom: 80%;
+	left: 32%;	
     color: white;
     background-color: black;
+	border-radius: 3px;
     padding: 5px;
-    border-radius: 50%;
-    cursor: pointer;
+}
+
+.div-ajout-projet {
+	display: flex;
+	justify-content: center;
+	margin-top: 30px;
+}
+
+.ajout-projet {
+	font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	background-color: #1D6154;
+	width: 230px;
+	height: 40px;
+	text-align: center;
+	border-radius: 60px ;
 }
 
 /****************/
@@ -385,7 +418,7 @@ footer nav ul {
 	min-height: 150px;
 }
 
-button { 
+.boutons button { 
 	display: flex;
 	align-items: center;
 	height: 40px;
@@ -402,7 +435,7 @@ button {
 	padding: 0px 20px;
 }
 
-.selected {
+.boutons .selected {
 	background-color: #1D6154; 
 	color: white;
 }

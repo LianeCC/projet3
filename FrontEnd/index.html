@@ -76,14 +76,26 @@
 									</div>
 									<h3 id="titlemodal"> Ajout photo </h3>
 									<form id="form-add-photo">
-										<label for="image">Choisir une image: </label>
-										<input type="file" id="image" name="image" accept="image/*" required>
-										<label for="title">Titre :</label>
-										<input type="text" id="title" name="title" placeholder="Titre du projet" required>
-										<label for="category">Categorie :</label>
-										<select id="category" name="category" required></select> 
+										<div class="image-upload">
+											<label for="image"> 
+												<i class="fa-regular fa-image"></i>
+												<span>+ Ajouter photo</span>
+												<p>jpg, png : 4mo max</p>
+											</label>
+											<input type="file" id="image" name="image" accept="image/*" required style = "display: none;">
+										</div>
+										<div class="div-title-category">
+											<label for="title">Titre</label>
+											<input type="text" id="title" name="title" required>
+											<label for="category">Catégorie</label>
+											<div class="select-category-wrapper">
+												<select id="category" name="category" required></select> 
+											</div>
+										</div>
 									</form>
-									<button class="valider-projet">Valider</button>
+									<div class=div-valider-projet>
+										<button class="valider-projet">Valider</button>
+									</div>
 								</div>
 
 							</div>

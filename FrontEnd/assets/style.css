@@ -119,7 +119,7 @@ h2 {
 }
 
 h3 {
-	font-size: 30px;
+	font-size: 25px;
 
 }
 nav ul {
@@ -214,7 +214,6 @@ nav img {
 
 .modale-wrapper {
 	width: 630px;
-	min-height: 688px;
 	padding: 20px;
 	background-color: #ffffff;
 	border-radius: 10px;
@@ -282,6 +281,7 @@ nav img {
 	display: flex;
 	justify-content: center;
 	margin-top: 30px;
+	margin-bottom: 20px;
 }
 
 .ajout-projet {
@@ -293,7 +293,112 @@ nav img {
 	height: 40px;
 	text-align: center;
 	border-radius: 60px ;
+	
 }
+
+/****** vue modale 2 */
+
+#form-add-photo {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 0 90px;
+	padding-bottom: 50px;
+	border-bottom: 1px solid #c9c9c9;
+}
+
+.image-upload {
+    display: flex;
+    flex-direction: column;
+	justify-content: center;
+	align-items: center;
+    border-radius: 3px;
+    background-color: #e6f0f5;
+    margin-bottom: 20px;
+	width: 100%;
+    height: 180px;
+    text-align: center;
+}
+
+.image-upload i {
+    font-size: 5em;
+    color: #bac5cc;
+}
+
+.image-upload span {
+    display: flex;
+	justify-content: center;
+	align-items: center;
+    font-size: 1em;
+	font-weight: 600;
+    color: #306585;
+    margin-top: 10px;
+	background-color: #cad5db;
+	width: 150px;
+	height: 40px;
+	border-radius: 60px;
+}
+
+.image-upload p {
+    font-size: 0.7em;
+    color: #454545;
+    margin-top: 10px;
+}
+
+.div-title-category {
+	width: 100%;
+}
+
+.div-title-category label {
+	display: flex;
+	align-items: flex-start;
+}
+
+#form-add-photo input, #form-add-photo select {
+	width: 100%;
+	height: 50px;
+    padding: 10px;
+	margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 1em;
+    box-sizing: border-box;
+	border: 1px solid #ffffff;
+	box-shadow: 0px 3px 10px rgba(158, 158, 158, 0.2);
+}
+
+.select-category-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.select-category-wrapper select {
+    appearance: none; 
+    -webkit-appearance: none;
+    background-position: right 25px center;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='gray' stroke-width='1'%3E%3Cpolyline points='6 8 10 12 14 8'/%3E%3C/svg%3E"); /* Flèche SVG vide */
+    background-repeat: no-repeat;
+    background-size: 25px;
+}
+
+.div-valider-projet {
+	display: flex;
+	justify-content: center;
+	margin-top: 30px;
+	margin-bottom: 20px;
+}
+
+.valider-projet {
+    font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	background-color: #a6a6a6;
+	width: 230px;
+	height: 40px;
+	text-align: center;
+	border-radius: 60px ;
+}
+
 
 /****************/
 

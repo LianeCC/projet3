@@ -32,9 +32,6 @@ window.onload = () => {
     afficherBoutonConnexion();
 };
 
-
-
-
 // ***** AFFICHAGE PROJET SUR PAGE D'ACCUEIL
 // Récupération des projets réalisés depuis l'API
 const reponseProjets = await fetch('http://localhost:5678/api/works');
@@ -49,6 +46,7 @@ function genererProjet(projets) {
         const fiche = projets[i]; 
         // création de la balise pour une fiche 
         const projetElement = document.createElement("figure");
+        projetElement.setAttribute("data-id", fiche.id) //ID pour gérer la suppression projet
         // création des 2 balises dans les fiches
         const imageElement = document.createElement("img");
         imageElement.src = fiche.imageUrl;
@@ -62,7 +60,6 @@ function genererProjet(projets) {
     }
 }
 
-// Affiche tous les projets au chargement
 genererProjet(projets);
 
 // GESTION DES BOUTONS FILTRES 
@@ -122,26 +119,30 @@ function genererBouton(categories) {
 genererBouton(categories);
 
 
-// ***** GESTION MODALE POUR AJOUT/SUPPRESSION PROJETS
+// ***** GESTION MODALE POUR MODIFICATION PROJETS
 let modale = null; 
 
 // ouverture de la modale
 const openModal = function (event) {
-    event.preventDefault;
+    event.preventDefault();
     const target = document.querySelector(event.target.getAttribute("href"));
     target.style.display = null;
     target.removeAttribute("aria-hidden");
     target.setAttribute("aria-modal", "true");
     modale = target;
     modale.addEventListener("click", closeModal);
-    modale.querySelector(".fermerModale").addEventListener("click", closeModal);
+    // Event pour la fermeture de la modale pour chaque vue
+    const fermerModaleButtons = modale.querySelectorAll(".fermerModale");
+    fermerModaleButtons.forEach(button => {
+        button.addEventListener("click", closeModal);
+    });
     modale.querySelector(".modal-stop").addEventListener("click", stopPropagation);
 }
 
 // fermeture de la modale
 const closeModal = function (event) {
     if (modale === null) return;
-    event.preventDefault()
+    event.preventDefault();
     backToModal1(); // retour à la vue initiale si on est sur la vue 2
     modale.style.display="none";
     modale.setAttribute("aria-hidden", "true");
@@ -156,41 +157,38 @@ const stopPropagation = function (event) {
     event.stopPropagation();            
 }
 
-// ajout des projets dans la modale 
-function genererProjetModale(projets) {
-    const sectionProjetModale = document.querySelector(".projets-disponibles");
-    for (let i = 0; i < projets.length; i++) {
-        const projetModale = projets[i];
-        const projetContainer = document.createElement("div");
-        projetContainer.classList.add("projet-container");
-        const imageProjetModale = document.createElement("img");
-        imageProjetModale.src = projetModale.imageUrl;
-        const iconTrash = document.createElement("i");
-        iconTrash.classList.add("fa-solid", "fa-trash-can");
-        projetContainer.appendChild(imageProjetModale);
-        projetContainer.appendChild(iconTrash);
-        sectionProjetModale.appendChild(projetContainer);
-    }
-}
-genererProjetModale(projets);
-
-// ouverture modale depuis le bouton
+// ouverture modale depuis le bouton Modifier
 document.querySelectorAll(".boutonModifier").forEach(a => {
     a.addEventListener("click", openModal);
 })
 
 // ouverture de la seconde vue     
 function openModal2 () {
-    const viewModale1 = document.querySelector(".vuemodale1")
+    const viewModale1 = document.querySelector(".vuemodale1");
     viewModale1.style.display = "none";
     const viewModale2 = document.querySelector(".vuemodale2");
     viewModale2.style.display = null;
     const backArrow = document.querySelector(".retourvue1");
     backArrow.style.display = null; 
-    
-};
+    chargerCategories();
+}
+
 const addProject = document.querySelector(".ajout-projet");
 addProject.addEventListener("click", openModal2);
+
+
+// Récupérer les catégories dynamiquement depuis l'API
+async function chargerCategories() {
+    const selectCategory = document.getElementById('category');
+    selectCategory.innerHTML = '';    
+    categories.forEach(categorie => {
+                const option = document.createElement("option");
+                option.value = categorie.id;
+                option.textContent = categorie.name;
+                selectCategory.appendChild(option);
+        });
+}
+
 
 // retour à la première vue 
 function backToModal1 () {
@@ -205,8 +203,54 @@ const backToProjectList = document.querySelector(".retourvue1");
 backToProjectList.addEventListener("click", backToModal1);
 
 
+// suppression d'un projet - ne supprime que dans la modale
+async function supprimerProjet(projetId, projetElement) {
+    const confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce projet ?");
+    if (!confirmation) return;
+    const token = localStorage.getItem('auth-token');
+    const response = await fetch(`http://localhost:5678/api/works/${projetId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    if (response.ok) {
+        projetElement.remove(); 
+        const projetElementPagePrincipale = document.querySelector(`figure[data-id="${projetId}"]`);
+            if (projetElementPagePrincipale) {
+                projetElementPagePrincipale.remove();
+            };
+        alert("Projet supprimé avec succès !");
+    } else {
+        const errorMessage = await response.text(); // Obtention du message d'erreur de l'API
+        console.error("Erreur lors de la suppression :", errorMessage);
+        alert("Erreur lors de la suppression du projet.");
+    }
+}
 
+// affichage des projets dans la modale 
+function genererProjetModale(projets) {
+    const sectionProjetModale = document.querySelector(".projets-disponibles");
+    for (let i = 0; i < projets.length; i++) {
+        const projetModale = projets[i];
+        const projetContainer = document.createElement("div");
+        projetContainer.classList.add("projet-container");
+        const imageProjetModale = document.createElement("img");
+        imageProjetModale.src = projetModale.imageUrl;
+        const iconTrash = document.createElement("i");
+        iconTrash.classList.add("fa-solid", "fa-trash-can");
+        //appel fonction suppression de projet ds la modale et page d'accueil
+        iconTrash.addEventListener("click", () => supprimerProjet(projetModale.id, projetContainer));
+        //rattache aux éléments parents 
+        projetContainer.appendChild(imageProjetModale);
+        projetContainer.appendChild(iconTrash);
+        sectionProjetModale.appendChild(projetContainer);
+    };
+}
 
+// lancement de la fonction pr affichage projets
+genererProjetModale(projets);
 
 
 

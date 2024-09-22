@@ -524,8 +524,6 @@ footer nav ul {
 }
 
 .boutons button { 
-	display: flex;
-	align-items: center;
 	height: 40px;
     font-size: 18px;
 	font-family: 'Syne';
@@ -535,7 +533,7 @@ footer nav ul {
 	text-align: center;
 	border: 1px solid #1D6154;
 	border-radius: 60px ;
-	min-width: 100px;
+	min-width: 80px;
 	margin: 0px 5px;
 	padding: 0px 20px;
 }
@@ -543,4 +541,5 @@ footer nav ul {
 .boutons .selected {
 	background-color: #1D6154; 
 	color: white;
+	
 }

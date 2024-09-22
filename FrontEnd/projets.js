@@ -1,14 +1,14 @@
 // ****** CONNEXION UTILISATEUR 
 function afficherBoutonConnexion() {
     const boutonConnexion = document.querySelector("#login-logout");
-    if (localStorage.getItem('auth-token')) {
+    if (localStorage.getItem("auth-token")) {
         // connexion validée, changement du texte
         boutonConnexion.textContent = "logout" ;
         boutonConnexion.setAttribute("href", "#");
         // affichage bannerEditionMode 
         const bannerEditionMode = document.querySelector(".bannerEditionMode");
         bannerEditionMode.style.display = "flex";
-        
+                
         // Suppression des boutons
         const boutons = document.querySelectorAll(".boutons button");
         boutons.forEach(bouton => {
@@ -17,7 +17,7 @@ function afficherBoutonConnexion() {
 
         // listener pour deconnexion utilisateur
         boutonConnexion.addEventListener("click", () => {
-            localStorage.removeItem('auth-token');
+            localStorage.removeItem("auth-token");
             window.location.href = "index.html";
         });
 
@@ -34,13 +34,13 @@ window.onload = () => {
 
 // ***** AFFICHAGE PROJET SUR PAGE D'ACCUEIL
 // Récupération des projets réalisés depuis l'API
-const reponseProjets = await fetch('http://localhost:5678/api/works');
+const reponseProjets = await fetch("http://localhost:5678/api/works");
 const projets = await reponseProjets.json();
 
 // création des projets 
 function genererProjet(projets) {
     const sectionFiches = document.querySelector(".gallery");
-    sectionFiches.innerHTML = ''; // vide la section avant de la remplir
+    sectionFiches.innerHTML = ""; // vide la section avant de la remplir
 
     for (let i = 0; i < projets.length; i++) {
         const fiche = projets[i]; 
@@ -63,21 +63,21 @@ function genererProjet(projets) {
 genererProjet(projets);
 
 // GESTION DES BOUTONS FILTRES 
-// enlever 'selected' de tous les boutons
+// enlever selected de tous les boutons
 function retirerSelectionBoutons() {
     const boutons = document.querySelectorAll(".boutons button");
     boutons.forEach(bouton => bouton.classList.remove("selected"));
 }
 
 // Récupération des catégories depuis l'API
-const reponseCategories = await fetch('http://localhost:5678/api/categories');
+const reponseCategories = await fetch("http://localhost:5678/api/categories");
 const categories = await reponseCategories.json();
 
 function genererBouton(categories) {
     const emplacementBoutons = document.querySelector(".boutons");
 
     //si utilisateur non connecté alors boutons : 
-    if (!localStorage.getItem('auth-token')) {
+    if (!localStorage.getItem("auth-token")) {
 
         // Création du bouton "Tous"
         const boutonTous = document.createElement("button");
@@ -179,8 +179,8 @@ addProject.addEventListener("click", openModal2);
 
 // Récupérer les catégories dynamiquement depuis l'API
 async function chargerCategories() {
-    const selectCategory = document.getElementById('category');
-    selectCategory.innerHTML = '';    
+    const selectCategory = document.getElementById("category");
+    selectCategory.innerHTML = "";    
     categories.forEach(categorie => {
                 const option = document.createElement("option");
                 option.value = categorie.id;
@@ -188,7 +188,6 @@ async function chargerCategories() {
                 selectCategory.appendChild(option);
         });
 }
-
 
 // retour à la première vue 
 function backToModal1 () {
@@ -203,35 +202,10 @@ const backToProjectList = document.querySelector(".retourvue1");
 backToProjectList.addEventListener("click", backToModal1);
 
 
-// suppression d'un projet - ne supprime que dans la modale
-async function supprimerProjet(projetId, projetElement) {
-    const confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce projet ?");
-    if (!confirmation) return;
-    const token = localStorage.getItem('auth-token');
-    const response = await fetch(`http://localhost:5678/api/works/${projetId}`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
-    });
-    if (response.ok) {
-        projetElement.remove(); 
-        const projetElementPagePrincipale = document.querySelector(`figure[data-id="${projetId}"]`);
-            if (projetElementPagePrincipale) {
-                projetElementPagePrincipale.remove();
-            };
-        alert("Projet supprimé avec succès !");
-    } else {
-        const errorMessage = await response.text(); // Obtention du message d'erreur de l'API
-        console.error("Erreur lors de la suppression :", errorMessage);
-        alert("Erreur lors de la suppression du projet.");
-    }
-}
-
 // affichage des projets dans la modale 
 function genererProjetModale(projets) {
     const sectionProjetModale = document.querySelector(".projets-disponibles");
+    sectionProjetModale.innerHTML = ""; // vide la section avant de la remplir
     for (let i = 0; i < projets.length; i++) {
         const projetModale = projets[i];
         const projetContainer = document.createElement("div");
@@ -252,5 +226,79 @@ function genererProjetModale(projets) {
 // lancement de la fonction pr affichage projets
 genererProjetModale(projets);
 
+// suppression d'un projet (modale et gallery)
+async function supprimerProjet(projetId, projetElement) {
+    const confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce projet ?");
+    if (!confirmation) return;
+    const token = localStorage.getItem("auth-token");
+    const response = await fetch(`http://localhost:5678/api/works/${projetId}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        }
+    });
+    if (response.ok) {
+        // suppression ds la modale
+        projetElement.remove(); 
+        // suppression ds la gallery
+        const projetElementPagePrincipale = document.querySelector(`figure[data-id="${projetId}"]`);
+            if (projetElementPagePrincipale) {
+                projetElementPagePrincipale.remove();
+            };
+        alert("Projet supprimé avec succès !");
+    } else {
+        const errorMessage = await response.text();
+        console.error("Erreur lors de la suppression :", errorMessage);
+        alert("Erreur lors de la suppression du projet.");
+    }
+}
 
+// ajout nouveau projet via le form-add-photo
+document.querySelector(".valider-projet").addEventListener("click", async (event) => {
+    event.preventDefault();
 
+    // récup des données formulaire
+    const imageInput = document.querySelector("#image");
+    const titleInput = document.querySelector("#title");
+    const categorySelect = document.querySelector("#category");
+
+    const imageFile = imageInput.files[0];
+    const title = titleInput.value;
+    const category = categorySelect.value;
+
+    // vérif des champs bien remplis
+    if (!imageFile || !title || !category) {
+        alert("Veuillez remplir tous les champs");
+        return;
+    }
+
+    // Données à envoyer avec FormData
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    formData.append("title", title);
+    formData.append("category", category);
+
+    const token = localStorage.getItem("auth-token"); 
+    const response = await fetch("http://localhost:5678/api/works", {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
+        body: formData 
+    });
+
+    if (response.ok) {
+        const nouveauProjet = await response.json();
+        // Ajouter le nouveau projet à la liste des projets
+        projets.push(nouveauProjet); 
+        // Mettre à jour la galerie et la modale
+        genererProjet(projets);
+        genererProjetModale(projets); 
+        // Afficher un message de succès
+        alert("Projet ajouté avec succès !");
+        document.getElementById("form-add-photo").reset();
+    } else {
+        alert("Erreur lors de l'ajout du projet. Veuillez vérifier les informations.");
+    }
+})

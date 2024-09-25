@@ -314,10 +314,16 @@ nav img {
 	align-items: center;
     border-radius: 3px;
     background-color: #e6f0f5;
-    margin-bottom: 20px;
-	width: 100%;
+	width: 450px;
     height: 180px;
     text-align: center;
+	overflow: hidden;
+}
+
+.image-upload img {
+    display: block;
+	max-height: 180px; 
+    object-fit: contain;
 }
 
 .image-upload i {
@@ -346,6 +352,7 @@ nav img {
 }
 
 .div-title-category {
+	margin-top: 20px;
 	width: 100%;
 }
 
@@ -387,6 +394,7 @@ nav img {
 	margin-top: 30px;
 	margin-bottom: 20px;
 }
+
 
 .valider-projet {
     font-family: 'Syne';
@@ -541,5 +549,4 @@ footer nav ul {
 .boutons .selected {
 	background-color: #1D6154; 
 	color: white;
-	
 }

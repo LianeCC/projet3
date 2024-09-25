@@ -37,6 +37,3 @@ function afficherMessageErreur(message) {
 }
 
 ajoutListenerConnexion();
-
-
-

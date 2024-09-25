@@ -35,7 +35,7 @@ window.onload = () => {
 // ***** AFFICHAGE PROJET SUR PAGE D'ACCUEIL
 // Récupération des projets réalisés depuis l'API
 const reponseProjets = await fetch("http://localhost:5678/api/works");
-const projets = await reponseProjets.json();
+let projets = await reponseProjets.json();
 
 // création des projets 
 function genererProjet(projets) {
@@ -215,7 +215,9 @@ function genererProjetModale(projets) {
         const iconTrash = document.createElement("i");
         iconTrash.classList.add("fa-solid", "fa-trash-can");
         //appel fonction suppression de projet ds la modale et page d'accueil
-        iconTrash.addEventListener("click", () => supprimerProjet(projetModale.id, projetContainer));
+        iconTrash.addEventListener("click", async () => {
+            await supprimerProjet(projetModale.id, projetContainer)
+        });
         //rattache aux éléments parents 
         projetContainer.appendChild(imageProjetModale);
         projetContainer.appendChild(iconTrash);
@@ -226,11 +228,13 @@ function genererProjetModale(projets) {
 // lancement de la fonction pr affichage projets
 genererProjetModale(projets);
 
+
 // suppression d'un projet (modale et gallery)
 async function supprimerProjet(projetId, projetElement) {
     const confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce projet ?");
     if (!confirmation) return;
-    const token = localStorage.getItem("auth-token");
+
+    const token = sessionStorage.getItem("auth-token");
     const response = await fetch(`http://localhost:5678/api/works/${projetId}`, {
         method: "DELETE",
         headers: {
@@ -239,8 +243,11 @@ async function supprimerProjet(projetId, projetElement) {
         }
     });
     if (response.ok) {
-        // suppression ds la modale
+        // suppression DOM
         projetElement.remove(); 
+        // supression ds tableau local des projets 
+        projets = projets.filter(projet => projet.id !== projetId);
+
         // suppression ds la gallery
         const projetElementPagePrincipale = document.querySelector(`figure[data-id="${projetId}"]`);
             if (projetElementPagePrincipale) {
@@ -254,7 +261,66 @@ async function supprimerProjet(projetId, projetElement) {
     }
 }
 
-// ajout nouveau projet via le form-add-photo
+
+// fonction pr afficher l'image uploadée et vérif
+function imageUpload() {
+    const imageInput = document.getElementById("image");
+    const label = document.querySelector("label[for=image]");
+    imageInput.addEventListener("change", async (event) => {
+        const file = imageInput.files[0]; 
+        const maxSize = 4 * 1024 * 1024;
+        const validFormats = ["image/jpeg", "image/png", "image/jpg"];
+        
+        if (file) {
+            event.preventDefault();
+            if (file.size > maxSize) {
+                alert("L'image ne doit pas dépasser 4 Mo.");
+                imageInput.value = ""; 
+                return;
+            }
+            if (!validFormats.includes(file.type)) {
+                alert("Format non valide. Veuillez sélectionner une image au format JPG, JPEG ou PNG.");
+                imageInput.value = "";
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                label.innerHTML = `<img src="${e.target.result}" alt="Image sélectionnée" />`;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+// Gestion du bouton Valider
+function activateButtonValider() {
+    const form = document.getElementById("form-add-photo");
+    const buttonValider = document.querySelector(".valider-projet");
+    const imageInput = document.getElementById("image");
+    const titleInput = document.getElementById("title");
+    const categorySelect = document.getElementById("category");
+
+    form.addEventListener("input", () => {
+        if (imageInput.files.length > 0 && titleInput.value && categorySelect.value) {
+            buttonValider.style.backgroundColor = "#1D6154";
+        } else {
+            buttonValider.style.backgroundColor = "#a6a6a6";
+        }
+    });
+}
+
+// Réinitialisation form après envoi
+function resetForm() {
+    const form = document.getElementById("form-add-photo");
+    const label = document.querySelector("label[for=image]");
+    form.reset(); 
+    label.innerHTML = `<i class="fa-regular fa-image"></i>
+                       <span>+ Ajouter photo</span>
+                       <p>jpg, png : 4mo max</p>`;
+}
+
+
+// Ajout nouveau projet avec imageUpload, activateButtonValider, resetForm
 document.querySelector(".valider-projet").addEventListener("click", async (event) => {
     event.preventDefault();
 
@@ -279,7 +345,7 @@ document.querySelector(".valider-projet").addEventListener("click", async (event
     formData.append("title", title);
     formData.append("category", category);
 
-    const token = localStorage.getItem("auth-token"); 
+    const token = sessionStorage.getItem("auth-token"); 
     const response = await fetch("http://localhost:5678/api/works", {
         method: "POST",
         headers: {
@@ -297,8 +363,11 @@ document.querySelector(".valider-projet").addEventListener("click", async (event
         genererProjetModale(projets); 
         // Afficher un message de succès
         alert("Projet ajouté avec succès !");
-        document.getElementById("form-add-photo").reset();
+        resetForm();
     } else {
         alert("Erreur lors de l'ajout du projet. Veuillez vérifier les informations.");
     }
 })
+
+imageUpload();
+activateButtonValider();

@@ -10,6 +10,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<link rel="shortcut icon" href="#">
 	<meta name="description" content="">
+	<link rel="icon" href="data:,">
 	<link rel="stylesheet" href="./assets/style.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 	<script type="module" src="projets.js"></script>
@@ -28,8 +29,8 @@
 			<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 			<nav>
 				<ul>
-					<li><a href="./index.html">projets</a></li>
-					<li><a href="#">contact</a></li>
+					<li><a href="#mes-projets">projets</a></li>
+					<li><a href="#formulaire-contact">contact</a></li>
 					<li><a href="login.html" id="login-logout">login</a></li>
 					<li><a href="#"><img src="./assets/icons/instagram.png" alt="Instagram"></a></li>
 				</ul>
@@ -37,7 +38,7 @@
 		</header>
 		
 		<main>
-			
+
 			<section id="introduction">
 				<figure>
 					<img src="./assets/images/sophie-bluel.png" alt="">
@@ -51,13 +52,12 @@
 			</section>
 			
 			<section id="portfolio">
-					<h2>Mes Projets</h2>
-					
+					<h2 id="mes-projets">Mes Projets</h2>
 					<div class="bannerModifier">
 						<a href="#modale" class="boutonModifier"><i class="fa-regular fa-pen-to-square"></i>modifier</a>	
+						
 						<aside id="modale" class="modale" aria-hidden="true" role="dialog" aria-labelledby="titlemodal" style="display:none">
 							<div class="modale-wrapper modal-stop">
-								
 								<div class="vuemodale1">
 									<div class="icones-modale">
 										<button class="fermerModale"><i class="fa-solid fa-xmark"></i></button>
@@ -97,23 +97,17 @@
 										<button class="valider-projet">Valider</button>
 									</div>
 								</div>
-
 							</div>
 						</aside>
-					
+
 					</div>
-				<div class="boutons">
-				</div>
 
-				<div class="gallery">
-				</div>
-
+				<div class="filters"></div>
+				<div class="gallery"></div>
 			</section>
-
-			
 			
 			<section id="contact">
-				<h2>Contact</h2>
+				<h2 id="formulaire-contact">Contact</h2>
 				<p>Vous avez un projet ? Discutons-en !</p>
 				<form action="#" method="post">
 					<label for="name">Nom</label>
@@ -125,17 +119,15 @@
 					<input type="submit" value="Envoyer">
 				</form>
 			</section>
-		
+
 		</main>
-
-	</div>
-
 	
+	</div>
 	
 	<footer>
 		<nav>
 			<ul>
-				<li>Mentions Légales</li>
+				<li><a href="#">Mention légales</a></li>
 			</ul>
 		</nav>
 	</footer>

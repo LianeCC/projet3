@@ -1,185 +1,231 @@
 // ****** CONNEXION UTILISATEUR 
+const token = sessionStorage.getItem("auth-token");
+const boutonConnexion = document.querySelector("#login-logout");
+const bannerEditionMode = document.querySelector(".bannerEditionMode");
+const bannerModifier = document.querySelector(".bannerModifier");
+
 function afficherBoutonConnexion() {
-    const boutonConnexion = document.querySelector("#login-logout");
-    if (localStorage.getItem("auth-token")) {
-        // connexion validée, changement du texte
+    if (token) {
         boutonConnexion.textContent = "logout" ;
         boutonConnexion.setAttribute("href", "#");
-        // affichage bannerEditionMode 
-        const bannerEditionMode = document.querySelector(".bannerEditionMode");
         bannerEditionMode.style.display = "flex";
-                
-        // Suppression des boutons
-        const boutons = document.querySelectorAll(".boutons button");
-        boutons.forEach(bouton => {
-            bouton.remove();
-        });
-
-        // listener pour deconnexion utilisateur
-        boutonConnexion.addEventListener("click", () => {
-            localStorage.removeItem("auth-token");
-            window.location.href = "index.html";
-        });
-
-        // affichage encart Modifier à côté de Mes Projets
-        const bannerModifier = document.querySelector(".bannerModifier");
         bannerModifier.style.display = "flex";
+        const boutons = document.querySelectorAll(".filters button");
+        boutons.forEach(bouton => bouton.remove()); 
+
+        // Deconnexion utilisateur
+        boutonConnexion.addEventListener("click", () => {
+            sessionStorage.removeItem("auth-token");
+            window.location.href = "index.html";
+        });        
     } 
 }
 
-//appel fonction connexion
-window.onload = () => {
-    afficherBoutonConnexion();
-};
+//appel fonction connexion au chargement
+window.onload = afficherBoutonConnexion();
 
-// ***** AFFICHAGE PROJET SUR PAGE D'ACCUEIL
-// Récupération des projets réalisés depuis l'API
+
+// ***** AFFICHAGE PROJETS SUR PAGE D'ACCUEIL
 const reponseProjets = await fetch("http://localhost:5678/api/works");
 let projets = await reponseProjets.json();
+const projectGallery = document.querySelector(".gallery");
 
-// création des projets 
 function genererProjet(projets) {
-    const sectionFiches = document.querySelector(".gallery");
-    sectionFiches.innerHTML = ""; // vide la section avant de la remplir
-
-    for (let i = 0; i < projets.length; i++) {
-        const fiche = projets[i]; 
-        // création de la balise pour une fiche 
+    projectGallery.innerHTML = ""; // vide la section avant de la remplir
+    projets.forEach(fiche => {
         const projetElement = document.createElement("figure");
-        projetElement.setAttribute("data-id", fiche.id) //ID pour gérer la suppression projet
-        // création des 2 balises dans les fiches
+        projetElement.setAttribute("data-id", fiche.id);
+
         const imageElement = document.createElement("img");
         imageElement.src = fiche.imageUrl;
-        const figCaptionElement = document.createElement("figcaption")
+        const figCaptionElement = document.createElement("figcaption");
         figCaptionElement.innerText = fiche.title;
 
-        // rattache les balises aux éléments parents 
-        sectionFiches.appendChild(projetElement);
         projetElement.appendChild(imageElement);
         projetElement.appendChild(figCaptionElement);
-    }
+        projectGallery.appendChild(projetElement);
+    });
 }
 
 genererProjet(projets);
 
-// GESTION DES BOUTONS FILTRES 
-// enlever selected de tous les boutons
-function retirerSelectionBoutons() {
-    const boutons = document.querySelectorAll(".boutons button");
-    boutons.forEach(bouton => bouton.classList.remove("selected"));
-}
 
-// Récupération des catégories depuis l'API
+// ***** GESTION DES BOUTONS FILTRES 
+
 const reponseCategories = await fetch("http://localhost:5678/api/categories");
 const categories = await reponseCategories.json();
 
+function retirerSelectionBoutons() {
+    document.querySelectorAll(".filters button").forEach(bouton => bouton.classList.remove("selected"));
+}
+
 function genererBouton(categories) {
-    const emplacementBoutons = document.querySelector(".boutons");
+    const emplacementBoutons = document.querySelector(".filters");        
+    const boutonTous = document.createElement("button");
 
-    //si utilisateur non connecté alors boutons : 
-    if (!localStorage.getItem("auth-token")) {
-
-        // Création du bouton "Tous"
-        const boutonTous = document.createElement("button");
+    if (!token) {
+        // gestion btn TOUS 
         boutonTous.innerHTML = "Tous";
         boutonTous.classList.add("selected");
         emplacementBoutons.appendChild(boutonTous);
-
-        // Ajout d'un EventListener pour afficher tous les projets
         boutonTous.addEventListener("click", () => {
             genererProjet(projets);
-            // update du style du bouton
             retirerSelectionBoutons();
             boutonTous.classList.add("selected");
         });
-
-        // Création des boutons par catégorie
-        for (let index = 0; index < categories.length; index++) {
-            const categorie = categories[index];
+        // gestion btns autres catégories
+        categories.forEach(categorie => {
             const boutonElement = document.createElement("button");
             boutonElement.innerHTML = categorie.name;
             boutonElement.dataset.id = categorie.id;
 
-            // Ajout d'un EventListener pour filtrer par catégorie
             boutonElement.addEventListener("click", () => {
                 const projetsFiltres = projets.filter(projet => projet.categoryId === categorie.id);
-                document.querySelector(".gallery").innerHTML = "";
+                projectGallery.innerHTML = "";
                 genererProjet(projetsFiltres);
-                // update du style du bouton
                 retirerSelectionBoutons();
                 boutonElement.classList.add("selected");
             });
-
-            // rattache les boutons à l'élément parent
             emplacementBoutons.appendChild(boutonElement);
-        }
+        });
     }
 }
-//appel fonction création boutons
+
 genererBouton(categories);
 
 
-// ***** GESTION MODALE POUR MODIFICATION PROJETS
-let modale = null; 
 
-// ouverture de la modale
-const openModal = function (event) {
+// ***** GESTION MODALE -ouverture/fermeture/vues
+let modale = null; 
+const view1Modal = document.querySelector(".vuemodale1")
+const view2Modal = document.querySelector(".vuemodale2");
+const backArrow = document.querySelector(".retourvue1");
+const goToModal2 = document.querySelector(".ajout-projet");
+
+function stopPropagation(event) {
+    event.stopPropagation();
+}
+
+// fonction ouverture de la modale
+function openModal(event) {
     event.preventDefault();
     const target = document.querySelector(event.target.getAttribute("href"));
     target.style.display = null;
     target.removeAttribute("aria-hidden");
     target.setAttribute("aria-modal", "true");
     modale = target;
+
     modale.addEventListener("click", closeModal);
-    // Event pour la fermeture de la modale pour chaque vue
-    const fermerModaleButtons = modale.querySelectorAll(".fermerModale");
-    fermerModaleButtons.forEach(button => {
+    modale.querySelector(".modal-stop").addEventListener("click", stopPropagation);
+
+    modale.querySelectorAll(".fermerModale").forEach(button => {
         button.addEventListener("click", closeModal);
     });
-    modale.querySelector(".modal-stop").addEventListener("click", stopPropagation);
 }
 
-// fermeture de la modale
-const closeModal = function (event) {
-    if (modale === null) return;
+// fonction fermeture de la modale
+function closeModal(event) {
+    if (!modale) return;
+
     event.preventDefault();
     backToModal1(); // retour à la vue initiale si on est sur la vue 2
+
     modale.style.display="none";
     modale.setAttribute("aria-hidden", "true");
     modale.removeAttribute("aria-modal");
     modale.removeEventListener("click", closeModal);
-    modale.querySelector(".fermerModale").removeEventListener("click", closeModal);
     modale.querySelector(".modal-stop").removeEventListener("click", stopPropagation);
     modale = null;
 }
-//limiter la fermeture de la modale aux éléments enfants
-const stopPropagation = function (event) {
-    event.stopPropagation();            
-}
 
-// ouverture modale depuis le bouton Modifier
-document.querySelectorAll(".boutonModifier").forEach(a => {
-    a.addEventListener("click", openModal);
-})
-
-// ouverture de la seconde vue     
+// fonction ouverture de la seconde vue 
 function openModal2 () {
-    const viewModale1 = document.querySelector(".vuemodale1");
-    viewModale1.style.display = "none";
-    const viewModale2 = document.querySelector(".vuemodale2");
-    viewModale2.style.display = null;
-    const backArrow = document.querySelector(".retourvue1");
+    view1Modal.style.display = "none";
+    view2Modal.style.display = null;
     backArrow.style.display = null; 
-    chargerCategories();
 }
 
-const addProject = document.querySelector(".ajout-projet");
-addProject.addEventListener("click", openModal2);
+// fonction retour à la première vue 
+function backToModal1 () {
+    view1Modal.style.display = null;
+    view2Modal.style.display = "none";
+    backArrow.style.display = "none"; 
+}
+
+// appel des fonctions pour ouverture et naviguations entre les vues
+document.querySelector(".boutonModifier").addEventListener("click", openModal);
+backArrow.addEventListener("click", backToModal1);
+goToModal2.addEventListener("click", openModal2);
 
 
-// Récupérer les catégories dynamiquement depuis l'API
+// ***** GESTION MODALE - contenu 
+
+// view1 - affichage des projets dans la modale 
+function genererProjetModale(projets) {
+    const sectionProjetModale = document.querySelector(".projets-disponibles");
+    sectionProjetModale.innerHTML = "";
+
+    projets.forEach(projetModale => {
+        const projetContainer = document.createElement("div");
+        projetContainer.classList.add("projet-container");
+
+        const imageProjetModale = document.createElement("img");
+        imageProjetModale.src = projetModale.imageUrl;
+
+        const iconTrash = document.createElement("i");
+        iconTrash.classList.add("fa-solid", "fa-trash-can");
+
+        iconTrash.addEventListener("click", async () => {
+            await supprimerProjet(projetModale.id, projetContainer);
+        });
+
+        projetContainer.appendChild(imageProjetModale);
+        projetContainer.appendChild(iconTrash);
+        sectionProjetModale.appendChild(projetContainer);
+    });
+}
+
+genererProjetModale(projets);
+
+
+// **** SUPPRESSION D'UN PROJET (modale et gallery)
+async function supprimerProjet(projetId, projetElement) {
+    const confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce projet ?");
+    if (!confirmation) return;
+
+    const response = await fetch(`http://localhost:5678/api/works/${projetId}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        }
+    });
+
+    if (response.ok) {
+        projetElement.remove(); // suppression DOM
+        projets = projets.filter(projet => projet.id !== projetId); // supression ds tableau local des projets 
+
+        const projetElementPagePrincipale = document.querySelector(`figure[data-id="${projetId}"]`);
+            if (projetElementPagePrincipale) {
+                projetElementPagePrincipale.remove();
+            };
+            
+        alert("Projet supprimé avec succès !");
+    } else {
+        alert("Erreur lors de la suppression du projet.");
+    }
+}
+
+
+// ***** FORMULAIRE - ajout d'un nouveau projet
+const imageInput = document.getElementById("image");
+const label = document.querySelector("label[for=image]");
+const selectCategory = document.getElementById("category");
+const form = document.getElementById("form-add-photo");
+const buttonValider = document.querySelector(".valider-projet");
+const titleInput = document.getElementById("title");
+
 async function chargerCategories() {
-    const selectCategory = document.getElementById("category");
     selectCategory.innerHTML = "";    
     categories.forEach(categorie => {
                 const option = document.createElement("option");
@@ -189,83 +235,7 @@ async function chargerCategories() {
         });
 }
 
-// retour à la première vue 
-function backToModal1 () {
-    const viewModale1 = document.querySelector(".vuemodale1")
-    viewModale1.style.display = null;
-    const viewModale2 = document.querySelector(".vuemodale2");
-    viewModale2.style.display = "none";
-    const backArrow = document.querySelector(".retourvue1");
-    backArrow.style.display = "none"; 
-}
-const backToProjectList = document.querySelector(".retourvue1");
-backToProjectList.addEventListener("click", backToModal1);
-
-
-// affichage des projets dans la modale 
-function genererProjetModale(projets) {
-    const sectionProjetModale = document.querySelector(".projets-disponibles");
-    sectionProjetModale.innerHTML = ""; // vide la section avant de la remplir
-    for (let i = 0; i < projets.length; i++) {
-        const projetModale = projets[i];
-        const projetContainer = document.createElement("div");
-        projetContainer.classList.add("projet-container");
-        const imageProjetModale = document.createElement("img");
-        imageProjetModale.src = projetModale.imageUrl;
-        const iconTrash = document.createElement("i");
-        iconTrash.classList.add("fa-solid", "fa-trash-can");
-        //appel fonction suppression de projet ds la modale et page d'accueil
-        iconTrash.addEventListener("click", async () => {
-            await supprimerProjet(projetModale.id, projetContainer)
-        });
-        //rattache aux éléments parents 
-        projetContainer.appendChild(imageProjetModale);
-        projetContainer.appendChild(iconTrash);
-        sectionProjetModale.appendChild(projetContainer);
-    };
-}
-
-// lancement de la fonction pr affichage projets
-genererProjetModale(projets);
-
-
-// suppression d'un projet (modale et gallery)
-async function supprimerProjet(projetId, projetElement) {
-    const confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce projet ?");
-    if (!confirmation) return;
-
-    const token = sessionStorage.getItem("auth-token");
-    const response = await fetch(`http://localhost:5678/api/works/${projetId}`, {
-        method: "DELETE",
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-        }
-    });
-    if (response.ok) {
-        // suppression DOM
-        projetElement.remove(); 
-        // supression ds tableau local des projets 
-        projets = projets.filter(projet => projet.id !== projetId);
-
-        // suppression ds la gallery
-        const projetElementPagePrincipale = document.querySelector(`figure[data-id="${projetId}"]`);
-            if (projetElementPagePrincipale) {
-                projetElementPagePrincipale.remove();
-            };
-        alert("Projet supprimé avec succès !");
-    } else {
-        const errorMessage = await response.text();
-        console.error("Erreur lors de la suppression :", errorMessage);
-        alert("Erreur lors de la suppression du projet.");
-    }
-}
-
-
-// fonction pr afficher l'image uploadée et vérif
 function imageUpload() {
-    const imageInput = document.getElementById("image");
-    const label = document.querySelector("label[for=image]");
     imageInput.addEventListener("change", async (event) => {
         const file = imageInput.files[0]; 
         const maxSize = 4 * 1024 * 1024;
@@ -292,16 +262,9 @@ function imageUpload() {
     });
 }
 
-// Gestion du bouton Valider
 function activateButtonValider() {
-    const form = document.getElementById("form-add-photo");
-    const buttonValider = document.querySelector(".valider-projet");
-    const imageInput = document.getElementById("image");
-    const titleInput = document.getElementById("title");
-    const categorySelect = document.getElementById("category");
-
     form.addEventListener("input", () => {
-        if (imageInput.files.length > 0 && titleInput.value && categorySelect.value) {
+        if (imageInput.files.length > 0 && titleInput.value && selectCategory.value) {
             buttonValider.style.backgroundColor = "#1D6154";
         } else {
             buttonValider.style.backgroundColor = "#a6a6a6";
@@ -309,10 +272,7 @@ function activateButtonValider() {
     });
 }
 
-// Réinitialisation form après envoi
 function resetForm() {
-    const form = document.getElementById("form-add-photo");
-    const label = document.querySelector("label[for=image]");
     form.reset(); 
     label.innerHTML = `<i class="fa-regular fa-image"></i>
                        <span>+ Ajouter photo</span>
@@ -320,7 +280,7 @@ function resetForm() {
 }
 
 
-// Ajout nouveau projet avec imageUpload, activateButtonValider, resetForm
+// Ajout nouveau projet 
 document.querySelector(".valider-projet").addEventListener("click", async (event) => {
     event.preventDefault();
 
@@ -328,7 +288,6 @@ document.querySelector(".valider-projet").addEventListener("click", async (event
     const imageInput = document.querySelector("#image");
     const titleInput = document.querySelector("#title");
     const categorySelect = document.querySelector("#category");
-
     const imageFile = imageInput.files[0];
     const title = titleInput.value;
     const category = categorySelect.value;
@@ -345,7 +304,6 @@ document.querySelector(".valider-projet").addEventListener("click", async (event
     formData.append("title", title);
     formData.append("category", category);
 
-    const token = sessionStorage.getItem("auth-token"); 
     const response = await fetch("http://localhost:5678/api/works", {
         method: "POST",
         headers: {
@@ -356,18 +314,18 @@ document.querySelector(".valider-projet").addEventListener("click", async (event
 
     if (response.ok) {
         const nouveauProjet = await response.json();
-        // Ajouter le nouveau projet à la liste des projets
-        projets.push(nouveauProjet); 
-        // Mettre à jour la galerie et la modale
-        genererProjet(projets);
+        projets.push(nouveauProjet); // Ajouter le nouveau projet à la liste des projets
+        genererProjet(projets); 
         genererProjetModale(projets); 
-        // Afficher un message de succès
+
         alert("Projet ajouté avec succès !");
         resetForm();
+
     } else {
         alert("Erreur lors de l'ajout du projet. Veuillez vérifier les informations.");
     }
 })
 
+chargerCategories();
 imageUpload();
 activateButtonValider();

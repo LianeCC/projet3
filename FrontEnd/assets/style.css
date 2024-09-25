@@ -23,6 +23,7 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
@@ -32,6 +33,7 @@ footer, header, hgroup, menu, nav, section {
 html {
 	background-color: #fffef7;
 }
+
 body {
 	line-height: 1;
 	background-color: #fffef7;
@@ -46,14 +48,17 @@ body {
 ol, ul {
 	list-style: none;
 }
+
 blockquote, q {
 	quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
 	content: '';
 	content: none;
 }
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -64,7 +69,6 @@ button {
 }
 
 /** end reset css**/
-
 
 .bannerEditionMode {
 	display: none;
@@ -83,6 +87,7 @@ button {
 .content {
 	width: 1140px;
 	flex: 1;
+	padding: 0px 10px;
 	margin: auto;	
 }
 
@@ -91,6 +96,7 @@ header {
 	justify-content: space-between;
 	margin: 50px 0px;
 }
+
 section {
 	margin: 50px 0px;
 }
@@ -108,7 +114,6 @@ h1 > span {
 	font-family: 'Work Sans';
 	font-size:10px;
 	letter-spacing: 0.1em;
-;
 }
 
 h2 {
@@ -120,8 +125,8 @@ h2 {
 
 h3 {
 	font-size: 25px;
-
 }
+
 nav ul {
 	display: flex;
 	align-items: center;
@@ -155,9 +160,11 @@ nav img {
 	margin-bottom: 100px;
 
 }
+
 #introduction figure {
 	flex: 1
 }
+
 #introduction img {
 	display: block;
 	margin: auto;
@@ -167,6 +174,7 @@ nav img {
 #introduction article {
 	flex: 1
 }
+
 #introduction h2 {
 	margin-bottom: 1em;
 }
@@ -174,6 +182,7 @@ nav img {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
 #portfolio h2 {
 	text-align: center;
 }
@@ -198,8 +207,6 @@ nav img {
 	color: #B1663C;
 }
 
-/******** modale **********/ 
-
 .modale {
 	position : fixed;
 	display: flex;
@@ -223,6 +230,7 @@ nav img {
 	text-align: center;
 	padding-bottom: 50px;
 }
+
 .icones-modale {
 	display: flex;
 	align-items: center;
@@ -241,9 +249,6 @@ nav img {
 	font-size: 1.5em;
 	margin: 10px;
 }
-
-
-/********* vue modale 1 **********/
 
 .projets-disponibles {
 	display: grid;
@@ -295,8 +300,6 @@ nav img {
 	border-radius: 60px ;
 	
 }
-
-/****** vue modale 2 */
 
 #form-add-photo {
 	display: flex;
@@ -395,7 +398,6 @@ nav img {
 	margin-bottom: 20px;
 }
 
-
 .valider-projet {
     font-family: 'Syne';
 	font-weight: 700;
@@ -406,10 +408,6 @@ nav img {
 	text-align: center;
 	border-radius: 60px ;
 }
-
-
-/****************/
-
 
 .gallery {
 	width: 100%;
@@ -427,13 +425,16 @@ nav img {
 	width: 50%;
 	margin: auto;
 }
+
 #contact > * {
 	text-align: center;
 
 }
+
 #contact h2{
 	margin-bottom: 20px;
 }
+
 #contact form {
 	text-align: left;
 	margin-top:30px;
@@ -447,9 +448,11 @@ nav img {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
+
 #contact label {
 	margin: 2em 0 1em 0;
 }
+
 #contact textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
@@ -470,12 +473,15 @@ input[type="submit"]{
 	width: 50%;
 	margin: auto;
 }
+
 #formulaire-login > * {
 	text-align: center;
 
 }
+
 #formulaire-login h2{
 	margin-bottom: 20px;
+
 }
 #formulaire-login form {
 	text-align: left;
@@ -524,14 +530,14 @@ footer nav ul {
 	background-color: white;
 }
 
-.boutons {
+.filters {
 	display: flex;
 	justify-content:center;
 	align-items: center;
 	min-height: 150px;
 }
 
-.boutons button { 
+.filters button { 
 	height: 40px;
     font-size: 18px;
 	font-family: 'Syne';
@@ -546,7 +552,7 @@ footer nav ul {
 	padding: 0px 20px;
 }
 
-.boutons .selected {
+.filters .selected {
 	background-color: #1D6154; 
 	color: white;
 }

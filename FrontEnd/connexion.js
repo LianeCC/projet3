@@ -19,8 +19,8 @@ async function ajoutListenerConnexion() {
             //vérif validité email/password
             if (reponse.ok) {
                 const data = await reponse.json();
-                localStorage.setItem('auth-token', data.token);
-                console.log(localStorage.getItem('authToken'));
+                sessionStorage.setItem('auth-token', data.token);
+                console.log(sessionStorage.getItem('authToken'));
                 window.location.href = "index.html";
             } else {
                 // Afficher message d'erreur

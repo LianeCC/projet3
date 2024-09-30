@@ -64,6 +64,7 @@ function genererBouton(categories) {
     const boutonTous = document.createElement("button");
 
     if (!token) {
+        emplacementBoutons.style.height = "150px";
         // gestion btn TOUS 
         boutonTous.innerHTML = "Tous";
         boutonTous.classList.add("selected");
@@ -277,6 +278,7 @@ function resetForm() {
     label.innerHTML = `<i class="fa-regular fa-image"></i>
                        <span>+ Ajouter photo</span>
                        <p>jpg, png : 4mo max</p>`;
+    buttonValider.style.backgroundColor = "#a6a6a6";
 }
 
 

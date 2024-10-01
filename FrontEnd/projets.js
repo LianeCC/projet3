@@ -62,9 +62,11 @@ genererProjet(projets);
 
 // ***** GESTION DES BOUTONS FILTRES 
 let categories;
+let reponseCategoriesOk;
 
 try {
     const reponseCategories = await fetch("http://localhost:5678/api/categories");
+    reponseCategoriesOk = reponseCategories.ok;
     categories = await reponseCategories.json();
 } catch (error) {
     console.error("Erreur lors de la récupération des catégories :", error);
@@ -79,7 +81,7 @@ async function genererBouton(categories) {
     const emplacementBoutons = document.querySelector(".filters");
     const boutonTous = document.createElement("button");
 
-    if (!token && categories.ok) {
+    if (!token && reponseCategoriesOk) {
         emplacementBoutons.style.height = "150px";
         // gestion btn TOUS 
         boutonTous.innerHTML = "Tous";
@@ -232,6 +234,7 @@ async function supprimerProjet(projetId, projetElement) {
             alert("Erreur lors de la suppression du projet.");
         }
     } catch {
+        alert("Echec de la suppression du projet, vérifiez la connexion au serveur");
         console.error("Echec de la suppression du projet : ", error);
     }
 }

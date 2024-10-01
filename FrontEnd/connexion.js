@@ -28,7 +28,7 @@ async function ajoutListenerConnexion() {
                     afficherMessageErreur("Erreur dans l’identifiant ou le mot de passe");
                 }
             } catch (error) {
-                afficherMessageErreur("Une erreur est survenue lors de la tentative de connexion au serveur");
+                afficherMessageErreur("Erreur, veillez vérifier votre connexion au serveru");
 
             }
         });  

@@ -40,7 +40,6 @@ try {
     galleryinCaseServerDown.style.display = "grid";
 }
 
-
 async function genererProjet(projets) {
     projectGallery.innerHTML = "";
     projets.forEach(fiche => {
@@ -61,21 +60,26 @@ async function genererProjet(projets) {
 genererProjet(projets);
 
 
-
 // ***** GESTION DES BOUTONS FILTRES 
+let categories;
 
-const reponseCategories = await fetch("http://localhost:5678/api/categories");
-const categories = await reponseCategories.json();
+try {
+    const reponseCategories = await fetch("http://localhost:5678/api/categories");
+    categories = await reponseCategories.json();
+} catch (error) {
+    console.error("Erreur lors de la récupération des catégories :", error);
+}
+
 
 function retirerSelectionBoutons() {
     document.querySelectorAll(".filters button").forEach(bouton => bouton.classList.remove("selected"));
 }
 
 async function genererBouton(categories) {
-    const emplacementBoutons = document.querySelector(".filters");        
+    const emplacementBoutons = document.querySelector(".filters");
     const boutonTous = document.createElement("button");
 
-    if (!token) {
+    if (!token && categories.ok) {
         emplacementBoutons.style.height = "150px";
         // gestion btn TOUS 
         boutonTous.innerHTML = "Tous";
@@ -105,7 +109,6 @@ async function genererBouton(categories) {
 }
 
 genererBouton(categories);
-
 
 
 // ***** GESTION MODALE -ouverture/fermeture/vues
@@ -206,26 +209,30 @@ async function supprimerProjet(projetId, projetElement) {
     const confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce projet ?");
     if (!confirmation) return;
 
-    const response = await fetch(`http://localhost:5678/api/works/${projetId}`, {
-        method: "DELETE",
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
+    try {
+        const response = await fetch(`http://localhost:5678/api/works/${projetId}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            projetElement.remove(); // suppression DOM
+            projets = projets.filter(projet => projet.id !== projetId); // supression ds tableau local des projets 
+
+            const projetElementPagePrincipale = document.querySelector(`figure[data-id="${projetId}"]`);
+                if (projetElementPagePrincipale) {
+                    projetElementPagePrincipale.remove();
+                };
+                
+            alert("Projet supprimé avec succès !");
+        } else {
+            alert("Erreur lors de la suppression du projet.");
         }
-    });
-
-    if (response.ok) {
-        projetElement.remove(); // suppression DOM
-        projets = projets.filter(projet => projet.id !== projetId); // supression ds tableau local des projets 
-
-        const projetElementPagePrincipale = document.querySelector(`figure[data-id="${projetId}"]`);
-            if (projetElementPagePrincipale) {
-                projetElementPagePrincipale.remove();
-            };
-            
-        alert("Projet supprimé avec succès !");
-    } else {
-        alert("Erreur lors de la suppression du projet.");
+    } catch {
+        console.error("Echec de la suppression du projet : ", error);
     }
 }
 
@@ -293,9 +300,7 @@ function resetForm() {
     buttonValider.style.backgroundColor = "#a6a6a6";
 }
 
-
-// Ajout nouveau projet 
-document.querySelector(".valider-projet").addEventListener("click", async (event) => {
+async function ajouterProjet(event) {
     event.preventDefault();
 
     // récup des données formulaire
@@ -316,34 +321,39 @@ document.querySelector(".valider-projet").addEventListener("click", async (event
         return;
     }
 
-    // Données à envoyer avec FormData
     const formData = new FormData();
     formData.append("image", imageFile);
     formData.append("title", title);
     formData.append("category", category);
 
-    const response = await fetch("http://localhost:5678/api/works", {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${token}`
-        },
-        body: formData 
-    });
+    try {
+        const response = await fetch("http://localhost:5678/api/works", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+            body: formData 
+        });
 
-    if (response.ok) {
-        const nouveauProjet = await response.json();
-        projets.push(nouveauProjet); // Ajouter le nouveau projet à la liste des projets
-        genererProjet(projets); 
-        genererProjetModale(projets); 
+        if (response.ok) {
+            const nouveauProjet = await response.json();
+            projets.push(nouveauProjet); // Ajouter le nouveau projet à la liste des projets
+            genererProjet(projets); 
+            genererProjetModale(projets); 
 
-        alert("Projet ajouté avec succès !");
-        resetForm();
+            alert("Projet ajouté avec succès !");
+            resetForm();
 
-    } else {
-        alert("Erreur lors de l'ajout du projet. Veuillez vérifier les informations.");
+        } else {
+            alert("Erreur lors de l'ajout du projet. Veuillez vérifier les informations.");
+        }
+    } catch (error) {
+        alert("Echec de l'ajout du projet, vérifiez la connexion au serveur");
+        console.error("Echec de l'ajout du projet : ", error);
     }
-})
+}
 
 chargerCategories();
 imageUpload();
 activateButtonValider();
+document.querySelector(".valider-projet").addEventListener("click", ajouterProjet);

@@ -20,7 +20,7 @@ async function ajoutListenerConnexion() {
             if (reponse.ok) {
                 const data = await reponse.json();
                 sessionStorage.setItem('auth-token', data.token);
-                console.log(sessionStorage.getItem('authToken'));
+                console.log(sessionStorage.getItem('auth-token'));
                 window.location.href = "index.html";
             } else {
                 // Afficher message d'erreur

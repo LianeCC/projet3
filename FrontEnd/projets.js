@@ -115,7 +115,7 @@ function openModal(event) {
     target.removeAttribute("aria-hidden");
     target.setAttribute("aria-modal", "true");
     modale = target;
-
+    modale.style.display="flex";
     modale.addEventListener("click", closeModal);
     modale.querySelector(".modal-stop").addEventListener("click", stopPropagation);
 
@@ -142,8 +142,8 @@ function closeModal(event) {
 // fonction ouverture de la seconde vue 
 function openModal2 () {
     view1Modal.style.display = "none";
-    view2Modal.style.display = null;
-    backArrow.style.display = null; 
+    view2Modal.style.display = "inline";
+    backArrow.style.display = "inline"; 
 }
 
 // fonction retour à la première vue 
@@ -295,8 +295,12 @@ document.querySelector(".valider-projet").addEventListener("click", async (event
     const category = categorySelect.value;
 
     // vérif des champs bien remplis
-    if (!imageFile || !title || !category) {
-        alert("Veuillez remplir tous les champs");
+    if (!imageFile) {
+        alert("Veuillez télécharger une image");
+        return;
+    }
+    if (!title) {
+        alert("Veuillez indiquer un titre");
         return;
     }
 

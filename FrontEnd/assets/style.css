@@ -209,7 +209,7 @@ nav img {
 
 .modale {
 	position : fixed;
-	display: flex;
+	display: none;
 	align-items: center;
 	justify-content: center;
 	top: 0;
@@ -243,6 +243,14 @@ nav img {
 
 .vuemodale2 .icones-modale {
 	justify-content: space-between;
+}
+
+.retourvue1 {
+	display: none;
+}
+
+.vuemodale2 {
+	display: none;
 }
 
 .icones-modale button {

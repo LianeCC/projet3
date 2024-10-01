@@ -236,20 +236,20 @@ nav img {
 	align-items: center;
 }
 
-.vuemodale1 .icones-modale {
+.modal-vue-suppression-projet .icones-modale {
 	justify-content: flex-end;
 	border: none;
 }
 
-.vuemodale2 .icones-modale {
+.modal-vue-ajout-projet .icones-modale {
 	justify-content: space-between;
 }
 
-.retourvue1 {
+.retour-vue-suppression-projet {
 	display: none;
 }
 
-.vuemodale2 {
+.modal-vue-ajout-projet {
 	display: none;
 }
 

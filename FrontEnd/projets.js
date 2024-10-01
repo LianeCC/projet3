@@ -30,7 +30,7 @@ const reponseProjets = await fetch("http://localhost:5678/api/works");
 let projets = await reponseProjets.json();
 const projectGallery = document.querySelector(".gallery");
 
-function genererProjet(projets) {
+async function genererProjet(projets) {
     projectGallery.innerHTML = ""; // vide la section avant de la remplir
     projets.forEach(fiche => {
         const projetElement = document.createElement("figure");
@@ -59,7 +59,7 @@ function retirerSelectionBoutons() {
     document.querySelectorAll(".filters button").forEach(bouton => bouton.classList.remove("selected"));
 }
 
-function genererBouton(categories) {
+async function genererBouton(categories) {
     const emplacementBoutons = document.querySelector(".filters");        
     const boutonTous = document.createElement("button");
 
@@ -98,10 +98,10 @@ genererBouton(categories);
 
 // ***** GESTION MODALE -ouverture/fermeture/vues
 let modale = null; 
-const view1Modal = document.querySelector(".vuemodale1")
-const view2Modal = document.querySelector(".vuemodale2");
-const backArrow = document.querySelector(".retourvue1");
-const goToModal2 = document.querySelector(".ajout-projet");
+const viewDeleteProject = document.querySelector(".modal-vue-suppression-projet")
+const viewAddProject = document.querySelector(".modal-vue-ajout-projet");
+const backArrow = document.querySelector(".retour-vue-suppression-projet");
+const buttonOpenModalFormAddProject = document.querySelector(".ajout-projet");
 
 function stopPropagation(event) {
     event.stopPropagation();
@@ -129,7 +129,7 @@ function closeModal(event) {
     if (!modale) return;
 
     event.preventDefault();
-    backToModal1(); // retour à la vue initiale si on est sur la vue 2
+    backToModalDeleteProject(); // retour à la vue initiale si on est sur la vue 2
 
     modale.style.display="none";
     modale.setAttribute("aria-hidden", "true");
@@ -140,29 +140,29 @@ function closeModal(event) {
 }
 
 // fonction ouverture de la seconde vue 
-function openModal2 () {
-    view1Modal.style.display = "none";
-    view2Modal.style.display = "inline";
+function openModalFormAddProject () {
+    viewDeleteProject.style.display = "none";
+    viewAddProject.style.display = "inline";
     backArrow.style.display = "inline"; 
 }
 
 // fonction retour à la première vue 
-function backToModal1 () {
-    view1Modal.style.display = null;
-    view2Modal.style.display = "none";
+function backToModalDeleteProject () {
+    viewDeleteProject.style.display = null;
+    viewAddProject.style.display = "none";
     backArrow.style.display = "none"; 
 }
 
 // appel des fonctions pour ouverture et naviguations entre les vues
 document.querySelector(".boutonModifier").addEventListener("click", openModal);
-backArrow.addEventListener("click", backToModal1);
-goToModal2.addEventListener("click", openModal2);
+backArrow.addEventListener("click", backToModalDeleteProject);
+buttonOpenModalFormAddProject.addEventListener("click", openModalFormAddProject);
 
 
 // ***** GESTION MODALE - contenu 
 
 // view1 - affichage des projets dans la modale 
-function genererProjetModale(projets) {
+async function genererProjetModale(projets) {
     const sectionProjetModale = document.querySelector(".projets-disponibles");
     sectionProjetModale.innerHTML = "";
 

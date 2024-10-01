@@ -429,6 +429,18 @@ nav img {
 	width: 100%;
 }
 
+.gallery-server-down {
+	display: none;
+	width: 100%;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-column-gap: 20px;
+	grid-row-gap: 20px;
+}
+
+.gallery-server-down img {
+	width: 100%;
+}
+
 #contact {
 	width: 50%;
 	margin: auto;

@@ -9,21 +9,27 @@ async function ajoutListenerConnexion() {
             };
             // Création charge utile 
             const chargeUtile = JSON.stringify(connexion);
-            // fetch 
-            const reponse = await fetch("http://localhost:5678/api/users/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: chargeUtile
-            });
 
-            //vérif validité email/password
-            if (reponse.ok) {
-                const data = await reponse.json();
-                sessionStorage.setItem('auth-token', data.token);
-                window.location.href = "index.html";
-            } else {
-                // Afficher message d'erreur
-                afficherMessageErreur("Erreur dans l’identifiant ou le mot de passe");
+            try {
+                // fetch 
+                const reponse = await fetch("http://localhost:5678/api/users/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: chargeUtile
+                });
+
+                //vérif validité email/password
+                if (reponse.ok) {
+                    const data = await reponse.json();
+                    sessionStorage.setItem('auth-token', data.token);
+                    window.location.href = "index.html";
+                } else {
+                    // Afficher message d'erreur
+                    afficherMessageErreur("Erreur dans l’identifiant ou le mot de passe");
+                }
+            } catch (error) {
+                afficherMessageErreur("Une erreur est survenue lors de la tentative de connexion au serveur");
+
             }
         });  
 }

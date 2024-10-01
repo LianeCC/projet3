@@ -26,12 +26,23 @@ window.onload = afficherBoutonConnexion();
 
 
 // ***** AFFICHAGE PROJETS SUR PAGE D'ACCUEIL
-const reponseProjets = await fetch("http://localhost:5678/api/works");
-let projets = await reponseProjets.json();
+let reponseProjets;
+let projets;
 const projectGallery = document.querySelector(".gallery");
+const galleryinCaseServerDown = document.querySelector(".gallery-server-down");
+
+// affichage des projets si server down
+try {
+    reponseProjets = await fetch("http://localhost:5678/api/works");
+    if (!reponseProjets.ok) throw new Error("Echec de récupération des projets");
+    projets = await reponseProjets.json();
+} catch (error) {
+    galleryinCaseServerDown.style.display = "grid";
+}
+
 
 async function genererProjet(projets) {
-    projectGallery.innerHTML = ""; // vide la section avant de la remplir
+    projectGallery.innerHTML = "";
     projets.forEach(fiche => {
         const projetElement = document.createElement("figure");
         projetElement.setAttribute("data-id", fiche.id);
@@ -48,6 +59,7 @@ async function genererProjet(projets) {
 }
 
 genererProjet(projets);
+
 
 
 // ***** GESTION DES BOUTONS FILTRES 

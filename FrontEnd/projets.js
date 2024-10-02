@@ -38,6 +38,7 @@ try {
     projets = await reponseProjets.json();
 } catch (error) {
     galleryinCaseServerDown.style.display = "grid";
+    console.error("Erreur lors de la récupération des projets : ", error);
 }
 
 async function genererProjet(projets) {
@@ -303,6 +304,19 @@ function resetForm() {
     buttonValider.style.backgroundColor = "#a6a6a6";
 }
 
+function validerFormulaireAjoutProjet(imageFile, title) {
+    if (!imageFile) {
+        alert("Veuillez télécharger une image");
+        return false;
+    }
+    if (!title) {
+        alert("Veuillez indiquer un titre");
+        return false;
+    }
+    return true;
+}
+
+
 async function ajouterProjet(event) {
     event.preventDefault();
 
@@ -314,13 +328,7 @@ async function ajouterProjet(event) {
     const title = titleInput.value;
     const category = categorySelect.value;
 
-    // vérif des champs bien remplis
-    if (!imageFile) {
-        alert("Veuillez télécharger une image");
-        return;
-    }
-    if (!title) {
-        alert("Veuillez indiquer un titre");
+    if (!validerFormulaireAjoutProjet(imageFile, title)) {
         return;
     }
 
